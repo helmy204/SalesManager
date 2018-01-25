@@ -1,0 +1,142 @@
+<%@ Page Title="" Language="C#" MasterPageFile="~/MasterPage.master" AutoEventWireup="true" CodeFile="rptCustomerStatmentAccount.aspx.cs" Inherits="Reports_rptCustomerStatmentAccount" %>
+
+<%@ Register Assembly="Microsoft.ReportViewer.WebForms, Version=9.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a"
+    Namespace="Microsoft.Reporting.WebForms" TagPrefix="rsweb" %>
+
+<%@ Register assembly="AjaxControlToolkit" namespace="AjaxControlToolkit" tagprefix="cc1" %>
+<asp:Content ID="Content1" ContentPlaceHolderID="ContentPlaceHolder1" Runat="Server">
+ <script language="javascript" type="text/javascript" >
+
+      
+    //--- To Show Modal Popup of ValidationSummary
+    function ShowModalDialog(group) {
+    var g='';
+    g=group ;
+    var vs = document.getElementById ('<%=ValidationSummary3.ClientID %>');
+         vs.validationGroup=g ;
+        var x = $find('<%=ModalExtnd1.ClientID %>');
+        
+        Page_ClientValidate(g );
+        if (!Page_IsValid)
+            x.show();
+      
+
+    }
+</script>
+
+<asp:Panel ID="pnlControl" runat="server" GroupingText="Customer Statment Account" 
+        DefaultButton="imgbtnShow" >
+      <asp:UpdatePanel ID="upnlControl" runat="server">
+        <ContentTemplate>
+        <table width="100%">
+        <tr>
+        <td style="width: 147px" class="tableCell">
+            <asp:Label ID="lblCustomer" runat="server" Text="Customer :"></asp:Label>
+            </td>
+        <td>
+            <asp:TextBox ID="txtCustomer" runat="server"></asp:TextBox>
+            <cc1:AutoCompleteExtender ID="txtCustomer_AutoCompleteExtender" runat="server" 
+                DelimiterCharacters="" Enabled="True" MinimumPrefixLength="1" 
+                ServiceMethod="GetCompletionList" ServicePath="" TargetControlID="txtCustomer" 
+                UseContextKey="True">
+            </cc1:AutoCompleteExtender>
+            <asp:RequiredFieldValidator ID="RequiredFieldValidator3" runat="server" 
+                ControlToValidate="txtCustomer" Display="Dynamic" 
+                ErrorMessage="Enter Customer." ValidationGroup="i">*</asp:RequiredFieldValidator>
+            </td>
+        </tr>
+        <tr>
+        <td style="width: 147px; " class="tableCell">
+            <asp:Label ID="lblStartDate" runat="server" Text="Start Period : "></asp:Label>
+            </td>
+        <td>
+            <asp:TextBox ID="txtStartDate" runat="server"></asp:TextBox>
+            <cc1:CalendarExtender ID="txtStartDate_CalendarExtender" runat="server" 
+                Enabled="True" TargetControlID="txtStartDate">
+            </cc1:CalendarExtender>
+            <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" 
+                ControlToValidate="txtStartDate" Display="Dynamic" 
+                ErrorMessage="Enter Start Period." ValidationGroup="i">*</asp:RequiredFieldValidator>
+            </td>
+        </tr>
+        <tr>
+        <td style="width: 147px; height: 15px;" class="tableCell">
+            <asp:Label ID="lblEndDate" runat="server" Text="End Period :"></asp:Label>
+            </td>
+        <td style="height: 15px">
+       
+            <asp:TextBox ID="txtEndDate" runat="server"></asp:TextBox>
+            <cc1:CalendarExtender ID="txtEndDate_CalendarExtender" runat="server" 
+                Enabled="True" TargetControlID="txtEndDate">
+            </cc1:CalendarExtender>
+            <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" 
+                ControlToValidate="txtEndDate" Display="Dynamic" 
+                ErrorMessage="Enter End  Period." ValidationGroup="i">*</asp:RequiredFieldValidator>
+        </td>
+        </tr>
+            <tr>
+                <td style="width: 147px">
+                </td>
+                <td>
+                    <asp:ImageButton ID="imgbtnShow" runat="server" AlternateText="Show" 
+                        Height="35px" ImageAlign="Middle" ImageUrl="~/img/report.png" 
+                        onclick="imgbtnSave_Click" OnClientClick="ShowModalDialog('i')" 
+                        ToolTip="Show" />
+                    <asp:ImageButton ID="imgbtnClear" runat="server" AlternateText="Clear" 
+                        CausesValidation="false" Height="35px" ImageAlign="Middle" 
+                        ImageUrl="~/img/Reset.png" onclick="imgbtnClear_Click" 
+                        ToolTip="Clear" />
+                </td>
+            </tr>
+        </table>
+        </ContentTemplate>
+          <Triggers>
+              <asp:PostBackTrigger ControlID="imgbtnShow" />
+          </Triggers>
+        </asp:UpdatePanel>
+    </asp:Panel>
+    <asp:Panel ID="pnlReport" runat="server" ScrollBars="Auto">
+        <rsweb:ReportViewer ID="ReportViewer1" runat="server" 
+    Font-Names="Verdana" Font-Size="8pt" Height="400px" Width="100%" Visible="False">
+            <LocalReport ReportPath="Reports\rdlc\rptCustomerStatmentAccount.rdlc">
+              
+            </LocalReport>
+        </rsweb:ReportViewer>
+      
+    </asp:Panel>
+    
+    <cc1:ModalPopupExtender ID="ModalExtnd1" runat="server" 
+    TargetControlID="lblHidden"
+    PopupControlID="SummaryDiv" 
+    BackgroundCssClass="modalBackground" DynamicServicePath="" Enabled="True" CancelControlID="btnclose" >
+</cc1:ModalPopupExtender>
+   
+<div id="SummaryDiv" runat="server" align="center" class="confirm" style="display:none" >
+    <table align="center" class="confirmtable" >
+        <tr>
+        <td valign="top">
+            <img align="middle" src="../img/warning.gif" />
+            <asp:Label ID="LabelMsg" runat="server" Text="PLZ,Enter The following :-" 
+                ></asp:Label>
+            &nbsp;&nbsp;</td>
+        </tr>
+        <tr>
+        <td colspan="2" align="left" >
+             <asp:ValidationSummary ID="ValidationSummary3" runat="server" 
+                   />
+            </td>
+        </tr>
+        <tr>
+        <td colspan="2">
+        <asp:Button ID="btnclose" runat="server" Text="Close" 
+                 />
+        
+            <%--End of Sucess ModalPopup --%>
+         </td>
+        </tr>
+    </table>      
+</div>
+<asp:Label ID="lblHidden" runat="server" Text="hidden" CssClass="hidelbl"      ></asp:Label>
+</asp:Content>
+
+

@@ -1,0 +1,21 @@
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/MasterPage.master" AutoEventWireup="true" CodeFile="rptProductsQuantities.aspx.cs" Inherits="Reports_rptProductsQuantities" %>
+
+<%@ Register assembly="Microsoft.ReportViewer.WebForms, Version=9.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" namespace="Microsoft.Reporting.WebForms" tagprefix="rsweb" %>
+
+<asp:Content ID="Content1" ContentPlaceHolderID="ContentPlaceHolder1" Runat="Server">
+    <rsweb:ReportViewer ID="ReportViewer1" runat="server" Font-Names="Verdana" 
+        Font-Size="8pt" Height="400px" Width="100%">
+        <LocalReport ReportPath="Reports\rdlc\rptProductsQuantities.rdlc">
+            <DataSources>
+                <rsweb:ReportDataSource DataSourceId="ObjectDataSource1" 
+                    Name="dsSalesManager_dtProductsQuantities" />
+            </DataSources>
+        </LocalReport>
+    </rsweb:ReportViewer>
+    <asp:ObjectDataSource ID="ObjectDataSource1" runat="server" 
+        SelectMethod="GetData" 
+        TypeName="dsSalesManagerTableAdapters.dtProductsQuantitiesTableAdapter">
+    </asp:ObjectDataSource>
+</asp:Content>
+
+

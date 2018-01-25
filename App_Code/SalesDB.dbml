@@ -1,0 +1,505 @@
+﻿<?xml version="1.0" encoding="utf-8"?><Database Name="SalesDB" Class="SalesDBDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+  <Connection Mode="WebSettings" ConnectionString="Data Source=.\MSSQLEXPRESS;Initial Catalog=SalesDB;Persist Security Info=True;User ID=sa" SettingsObjectName="System.Configuration.ConfigurationManager.ConnectionStrings" SettingsPropertyName="SalesDBConnectionString1" Provider="System.Data.SqlClient" />
+  <Table Name="dbo.Categories" Member="Categories">
+    <Type Name="Category">
+      <Column Name="CategoryID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="CategoryName" Type="System.String" DbType="NVarChar(150) NOT NULL" CanBeNull="false" />
+      <Column Name="ParentCategoryID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Association Name="Category_Category" Member="Categories" ThisKey="CategoryID" OtherKey="ParentCategoryID" Type="Category" />
+      <Association Name="Category_Product" Member="Products" ThisKey="CategoryID" OtherKey="CategoryID" Type="Product" />
+      <Association Name="Category_Category" Member="Category1" ThisKey="ParentCategoryID" OtherKey="CategoryID" Type="Category" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Customers" Member="Customers">
+    <Type Name="Customer">
+      <Column Name="CustomerID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="CustomerName" Type="System.String" DbType="NVarChar(150) NOT NULL" CanBeNull="false" />
+      <Column Name="Address" Type="System.String" DbType="NVarChar(250)" CanBeNull="true" />
+      <Column Name="Telphone" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="Mobile" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="Fax" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="StartBalance" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+      <Column Name="Balance" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+      <Association Name="Customer_SalesInvoice" Member="SalesInvoices" ThisKey="CustomerID" OtherKey="CustomerID" Type="SalesInvoice" />
+      <Association Name="Customer_SalesMaster" Member="SalesMasters" ThisKey="CustomerID" OtherKey="CustomerID" Type="SalesMaster" />
+      <Association Name="Customer_CustomersPayment" Member="CustomersPayments" ThisKey="CustomerID" OtherKey="CustomerID" Type="CustomersPayment" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Jobs" Member="Jobs">
+    <Type Name="Job">
+      <Column Name="JobID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="JobName" Type="System.String" DbType="NVarChar(150) NOT NULL" CanBeNull="false" />
+      <Association Name="Job_Employee" Member="Employees" ThisKey="JobID" OtherKey="JobID" Type="Employee" />
+    </Type>
+  </Table>
+  <Table Name="dbo.PaymentsForSuppliers" Member="PaymentsForSuppliers">
+    <Type Name="PaymentsForSupplier">
+      <Column Name="SupplierPaymentID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="SupplierID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="PaymentDateM" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="PaymentDateH" Type="System.String" DbType="NVarChar(150) NOT NULL" CanBeNull="false" />
+      <Column Name="Payment" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+      <Association Name="PaymentsForSupplier_PurchasesMaster" Member="PurchasesMasters" ThisKey="SupplierPaymentID" OtherKey="SupplierPaymentID" Type="PurchasesMaster" />
+      <Association Name="Supplier_PaymentsForSupplier" Member="Supplier" ThisKey="SupplierID" OtherKey="SupplierID" Type="Supplier" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.PurchasesInvoices" Member="PurchasesInvoices">
+    <Type Name="PurchasesInvoice">
+      <Column Name="PurchaseInvoiceID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="PurchaseInvoiceDateM" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="PurchaseInvoiceDateH" Type="System.String" DbType="NVarChar(150) NOT NULL" CanBeNull="false" />
+      <Column Name="SupplierID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="FromDateM" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="FromDateH" Type="System.String" DbType="NVarChar(150) NOT NULL" CanBeNull="false" />
+      <Column Name="ToDateM" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="ToDateH" Type="System.String" DbType="NVarChar(150) NOT NULL" CanBeNull="false" />
+      <Column Name="Status" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Association Name="PurchasesInvoice_PurchasesInvoicesDetail" Member="PurchasesInvoicesDetails" ThisKey="PurchaseInvoiceID" OtherKey="PurchaseInvoiceID" Type="PurchasesInvoicesDetail" />
+      <Association Name="Supplier_PurchasesInvoice" Member="Supplier" ThisKey="SupplierID" OtherKey="SupplierID" Type="Supplier" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.PurchasesInvoicesDetails" Member="PurchasesInvoicesDetails">
+    <Type Name="PurchasesInvoicesDetail">
+      <Column Name="PurchaseInvoiceDetailID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="PurchaseInvoiceID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="DateM" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="DateH" Type="System.String" DbType="NVarChar(150) NOT NULL" CanBeNull="false" />
+      <Column Name="TransactionNO" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Type" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Debit" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+      <Column Name="Credit" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+      <Association Name="PurchasesInvoice_PurchasesInvoicesDetail" Member="PurchasesInvoice" ThisKey="PurchaseInvoiceID" OtherKey="PurchaseInvoiceID" Type="PurchasesInvoice" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.SalesInvoices" Member="SalesInvoices">
+    <Type Name="SalesInvoice">
+      <Column Name="SalesInvoiceID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="SalesInvoiceDateM" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="SalesInvoiceDateH" Type="System.String" DbType="NVarChar(150) NOT NULL" CanBeNull="false" />
+      <Column Name="CustomerID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="FromDateM" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="FromDateH" Type="System.String" DbType="NVarChar(150) NOT NULL" CanBeNull="false" />
+      <Column Name="ToDateM" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="ToDateH" Type="System.String" DbType="NVarChar(150) NOT NULL" CanBeNull="false" />
+      <Column Name="Status" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Association Name="SalesInvoice_SalesInvoicesDetail" Member="SalesInvoicesDetails" ThisKey="SalesInvoiceID" OtherKey="SalesInvoiceID" Type="SalesInvoicesDetail" />
+      <Association Name="Customer_SalesInvoice" Member="Customer" ThisKey="CustomerID" OtherKey="CustomerID" Type="Customer" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.SalesInvoicesDetails" Member="SalesInvoicesDetails">
+    <Type Name="SalesInvoicesDetail">
+      <Column Name="SalesInvoiceDetailID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="SalesInvoiceID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="DateM" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="DateH" Type="System.String" DbType="NVarChar(150) NOT NULL" CanBeNull="false" />
+      <Column Name="TransactionNO" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Type" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Debit" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+      <Column Name="Credit" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+      <Association Name="SalesInvoice_SalesInvoicesDetail" Member="SalesInvoice" ThisKey="SalesInvoiceID" OtherKey="SalesInvoiceID" Type="SalesInvoice" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Suppliers" Member="Suppliers">
+    <Type Name="Supplier">
+      <Column Name="SupplierID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="SupplierName" Type="System.String" DbType="NVarChar(150) NOT NULL" CanBeNull="false" />
+      <Column Name="Address" Type="System.String" DbType="NVarChar(250)" CanBeNull="true" />
+      <Column Name="Telphone" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="Mobile" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="Fax" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="StartBalance" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+      <Column Name="Balance" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+      <Association Name="Supplier_PaymentsForSupplier" Member="PaymentsForSuppliers" ThisKey="SupplierID" OtherKey="SupplierID" Type="PaymentsForSupplier" />
+      <Association Name="Supplier_PurchasesInvoice" Member="PurchasesInvoices" ThisKey="SupplierID" OtherKey="SupplierID" Type="PurchasesInvoice" />
+      <Association Name="Supplier_PurchasesMaster" Member="PurchasesMasters" ThisKey="SupplierID" OtherKey="SupplierID" Type="PurchasesMaster" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Employees" Member="Employees">
+    <Type Name="Employee">
+      <Column Name="EmployeeID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="EmployeeName" Type="System.String" DbType="NVarChar(150) NOT NULL" CanBeNull="false" />
+      <Column Name="JobID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Adress" Type="System.String" DbType="NVarChar(250)" CanBeNull="true" />
+      <Column Name="Telphone" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="Mobile" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="Email" Type="System.String" DbType="NChar(10)" CanBeNull="true" />
+      <Association Name="Employee_PurchasesMaster" Member="PurchasesMasters" ThisKey="EmployeeID" OtherKey="EmployeeID" Type="PurchasesMaster" />
+      <Association Name="Employee_SalesMaster" Member="SalesMasters" ThisKey="EmployeeID" OtherKey="EmployeeID" Type="SalesMaster" />
+      <Association Name="Job_Employee" Member="Job" ThisKey="JobID" OtherKey="JobID" Type="Job" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.SalesDiscardsMaster" Member="SalesDiscardsMasters">
+    <Type Name="SalesDiscardsMaster">
+      <Column Name="SalesDiscardsID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="SalesDiscardsDateM" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="SalesDiscardsDateH" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="SalesID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="IsCash" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="Notes" Type="System.String" DbType="NVarChar(250)" CanBeNull="true" />
+      <Association Name="SalesDiscardsMaster_SalesDiscardsDetail" Member="SalesDiscardsDetails" ThisKey="SalesDiscardsID" OtherKey="SalesDiscardsID" Type="SalesDiscardsDetail" />
+      <Association Name="SalesMaster_SalesDiscardsMaster" Member="SalesMaster" ThisKey="SalesID" OtherKey="SalesID" Type="SalesMaster" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.SalesDiscardsDetails" Member="SalesDiscardsDetails">
+    <Type Name="SalesDiscardsDetail">
+      <Column Name="SalesDiscardsDetailID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="SalesDiscardsID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="ProductID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Quantity" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+      <Column Name="Price" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+      <Association Name="SalesDiscardsMaster_SalesDiscardsDetail" Member="SalesDiscardsMaster" ThisKey="SalesDiscardsID" OtherKey="SalesDiscardsID" Type="SalesDiscardsMaster" IsForeignKey="true" />
+      <Association Name="Product_SalesDiscardsDetail" Member="Product" ThisKey="ProductID" OtherKey="ProductID" Type="Product" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.UnitConversions" Member="UnitConversions">
+    <Type Name="UnitConversion">
+      <Column Name="UnitConversionID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="UnitID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Factor" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+      <Association Name="Unit_UnitConversion" Member="Unit" ThisKey="UnitID" OtherKey="UnitID" Type="Unit" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Units" Member="Units">
+    <Type Name="Unit">
+      <Column Name="UnitID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="UnitName_En" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="UnitName_Ar" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="symbol" Type="System.String" DbType="NChar(3)" CanBeNull="true" />
+      <Column Name="Basic" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="BasicUnitID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Association Name="Unit_UnitConversion" Member="UnitConversions" ThisKey="UnitID" OtherKey="UnitID" Type="UnitConversion" />
+      <Association Name="Unit_Unit" Member="Units" ThisKey="UnitID" OtherKey="BasicUnitID" Type="Unit" />
+      <Association Name="Unit_Product" Member="Products" ThisKey="UnitID" OtherKey="UnitID" Type="Product" />
+      <Association Name="Unit_Product1" Member="Products1" ThisKey="UnitID" OtherKey="BasicUnitID" Type="Product" />
+      <Association Name="Unit_SalesDetail" Member="SalesDetails" ThisKey="UnitID" OtherKey="UnitID" Type="SalesDetail" />
+      <Association Name="Unit_PurchaseDiscardsDetail" Member="PurchaseDiscardsDetails" ThisKey="UnitID" OtherKey="UnitID" Type="PurchaseDiscardsDetail" />
+      <Association Name="Unit_PurchaseDiscardsDetail1" Member="PurchaseDiscardsDetails1" ThisKey="UnitID" OtherKey="BasicUnitID" Type="PurchaseDiscardsDetail" />
+      <Association Name="Unit_Unit" Member="Unit1" ThisKey="BasicUnitID" OtherKey="UnitID" Type="Unit" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Products" Member="Products">
+    <Type Name="Product">
+      <Column Name="ProductID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="ProductName" Type="System.String" DbType="NVarChar(150) NOT NULL" CanBeNull="false" />
+      <Column Name="Price" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="CategoryID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Description" Type="System.String" DbType="NVarChar(250)" CanBeNull="true" />
+      <Column Name="SQty" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+      <Column Name="UnitID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="StartQuantity" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+      <Column Name="Quantity" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+      <Column Name="BasicUnitID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Association Name="Product_SalesDiscardsDetail" Member="SalesDiscardsDetails" ThisKey="ProductID" OtherKey="ProductID" Type="SalesDiscardsDetail" />
+      <Association Name="Product_PurchasesDetail" Member="PurchasesDetails" ThisKey="ProductID" OtherKey="ProductID" Type="PurchasesDetail" />
+      <Association Name="Product_SalesDetail" Member="SalesDetails" ThisKey="ProductID" OtherKey="ProductID" Type="SalesDetail" />
+      <Association Name="Product_PurchaseDiscardsDetail" Member="PurchaseDiscardsDetails" ThisKey="ProductID" OtherKey="ProductID" Type="PurchaseDiscardsDetail" />
+      <Association Name="Category_Product" Member="Category" ThisKey="CategoryID" OtherKey="CategoryID" Type="Category" IsForeignKey="true" />
+      <Association Name="Unit_Product" Member="Unit" ThisKey="UnitID" OtherKey="UnitID" Type="Unit" IsForeignKey="true" />
+      <Association Name="Unit_Product1" Member="Unit1" ThisKey="BasicUnitID" OtherKey="UnitID" Type="Unit" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.PurchasesDetails" Member="PurchasesDetails">
+    <Type Name="PurchasesDetail">
+      <Column Name="PurchasesDetailID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="PurchaseID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="ProductID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="PQTY" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+      <Column Name="UnitID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Quantity" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+      <Column Name="BasicUnitID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="PUnitPrice" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+      <Column Name="UnitPrice" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+      <Column Name="TotalPrice" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+      <Association Name="Product_PurchasesDetail" Member="Product" ThisKey="ProductID" OtherKey="ProductID" Type="Product" IsForeignKey="true" />
+      <Association Name="PurchasesMaster_PurchasesDetail" Member="PurchasesMaster" ThisKey="PurchaseID" OtherKey="PurchaseID" Type="PurchasesMaster" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.PurchasesMaster" Member="PurchasesMasters">
+    <Type Name="PurchasesMaster">
+      <Column Name="PurchaseID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="PurchaseDateM" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="PurchaseDateH" Type="System.String" DbType="NVarChar(150)" CanBeNull="true" />
+      <Column Name="SupplierID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="EmployeeID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="ISCash" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="Notes" Type="System.String" DbType="NVarChar(250)" CanBeNull="true" />
+      <Column Name="TotalPurchase" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+      <Column Name="Payments" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+      <Column Name="Rest" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+      <Column Name="SupplierPaymentID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Association Name="PurchasesMaster_PurchasesDetail" Member="PurchasesDetails" ThisKey="PurchaseID" OtherKey="PurchaseID" Type="PurchasesDetail" />
+      <Association Name="PurchasesMaster_PurchaseDiscardsMaster" Member="PurchaseDiscardsMasters" ThisKey="PurchaseID" OtherKey="PurchaseID" Type="PurchaseDiscardsMaster" />
+      <Association Name="Employee_PurchasesMaster" Member="Employee" ThisKey="EmployeeID" OtherKey="EmployeeID" Type="Employee" IsForeignKey="true" />
+      <Association Name="Supplier_PurchasesMaster" Member="Supplier" ThisKey="SupplierID" OtherKey="SupplierID" Type="Supplier" IsForeignKey="true" />
+      <Association Name="PaymentsForSupplier_PurchasesMaster" Member="PaymentsForSupplier" ThisKey="SupplierPaymentID" OtherKey="SupplierPaymentID" Type="PaymentsForSupplier" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.SalesDetails" Member="SalesDetails">
+    <Type Name="SalesDetail">
+      <Column Name="SalesDetailID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="SalesID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="ProductID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="SQTY" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+      <Column Name="UnitID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Quantity" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+      <Column Name="BasicUnitID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="SUnitPrice" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+      <Column Name="UnitPrice" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+      <Column Name="TotalPrice" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+      <Association Name="Product_SalesDetail" Member="Product" ThisKey="ProductID" OtherKey="ProductID" Type="Product" IsForeignKey="true" />
+      <Association Name="Unit_SalesDetail" Member="Unit" ThisKey="UnitID" OtherKey="UnitID" Type="Unit" IsForeignKey="true" />
+      <Association Name="SalesMaster_SalesDetail" Member="SalesMaster" ThisKey="SalesID" OtherKey="SalesID" Type="SalesMaster" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.SalesMaster" Member="SalesMasters">
+    <Type Name="SalesMaster">
+      <Column Name="SalesID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="SalesDateM" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="SalesDateH" Type="System.String" DbType="NVarChar(150) NOT NULL" CanBeNull="false" />
+      <Column Name="CustomerID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="CustomerName" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="EmployeeID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="IsCash" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="Notes" Type="System.String" DbType="NVarChar(250)" CanBeNull="true" />
+      <Column Name="TotalSales" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+      <Column Name="Payments" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+      <Column Name="Rest" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+      <Column Name="CustomerPaymentID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Association Name="SalesMaster_SalesDiscardsMaster" Member="SalesDiscardsMasters" ThisKey="SalesID" OtherKey="SalesID" Type="SalesDiscardsMaster" />
+      <Association Name="SalesMaster_SalesDetail" Member="SalesDetails" ThisKey="SalesID" OtherKey="SalesID" Type="SalesDetail" />
+      <Association Name="Customer_SalesMaster" Member="Customer" ThisKey="CustomerID" OtherKey="CustomerID" Type="Customer" IsForeignKey="true" />
+      <Association Name="Employee_SalesMaster" Member="Employee" ThisKey="EmployeeID" OtherKey="EmployeeID" Type="Employee" IsForeignKey="true" />
+      <Association Name="CustomersPayment_SalesMaster" Member="CustomersPayment" ThisKey="CustomerPaymentID" OtherKey="CustomerPaymentID" Type="CustomersPayment" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.CustomersPayments" Member="CustomersPayments">
+    <Type Name="CustomersPayment">
+      <Column Name="CustomerPaymentID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="CustomerID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="PaymentDateM" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="PaymentDateH" Type="System.String" DbType="NVarChar(150) NOT NULL" CanBeNull="false" />
+      <Column Name="Payment" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+      <Association Name="CustomersPayment_SalesMaster" Member="SalesMasters" ThisKey="CustomerPaymentID" OtherKey="CustomerPaymentID" Type="SalesMaster" />
+      <Association Name="Customer_CustomersPayment" Member="Customer" ThisKey="CustomerID" OtherKey="CustomerID" Type="Customer" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.PurchaseDiscardsMaster" Member="PurchaseDiscardsMasters">
+    <Type Name="PurchaseDiscardsMaster">
+      <Column Name="PurchaseDiscardsID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="PurchaseID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="PurchaseDiscardsDateM" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="PurchaseDiscardsDateH" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Notes" Type="System.String" DbType="NVarChar(250)" CanBeNull="true" />
+      <Column Name="TotalReturn" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+      <Association Name="PurchaseDiscardsMaster_PurchaseDiscardsDetail" Member="PurchaseDiscardsDetails" ThisKey="PurchaseDiscardsID" OtherKey="PurchaseDiscardsID" Type="PurchaseDiscardsDetail" />
+      <Association Name="PurchasesMaster_PurchaseDiscardsMaster" Member="PurchasesMaster" ThisKey="PurchaseID" OtherKey="PurchaseID" Type="PurchasesMaster" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.PurchaseDiscardsDetails" Member="PurchaseDiscardsDetails">
+    <Type Name="PurchaseDiscardsDetail">
+      <Column Name="PurchaseDiscardsDetailID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="PurchaseDiscardsID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="ProductID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="PDQTY" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+      <Column Name="UnitID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Quantity" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+      <Column Name="BasicUnitID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="PUnitPrice" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+      <Column Name="UnitPrice" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+      <Column Name="TotalPrice" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+      <Association Name="Product_PurchaseDiscardsDetail" Member="Product" ThisKey="ProductID" OtherKey="ProductID" Type="Product" IsForeignKey="true" />
+      <Association Name="PurchaseDiscardsMaster_PurchaseDiscardsDetail" Member="PurchaseDiscardsMaster" ThisKey="PurchaseDiscardsID" OtherKey="PurchaseDiscardsID" Type="PurchaseDiscardsMaster" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
+      <Association Name="Unit_PurchaseDiscardsDetail" Member="Unit" ThisKey="UnitID" OtherKey="UnitID" Type="Unit" IsForeignKey="true" />
+      <Association Name="Unit_PurchaseDiscardsDetail1" Member="Unit1" ThisKey="BasicUnitID" OtherKey="UnitID" Type="Unit" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Function Name="dbo.spCategories" Method="spCategories">
+    <ElementType Name="spCategoriesResult">
+      <Column Name="CategoryID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="CategoryName" Type="System.String" DbType="NVarChar(150) NOT NULL" CanBeNull="false" />
+      <Column Name="ParentCategoryID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="ParentCategoryName" Type="System.String" DbType="NVarChar(150)" CanBeNull="true" />
+    </ElementType>
+  </Function>
+  <Function Name="dbo.spEmployees" Method="spEmployees">
+    <ElementType Name="spEmployeesResult">
+      <Column Name="EmployeeID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="EmployeeName" Type="System.String" DbType="NVarChar(150) NOT NULL" CanBeNull="false" />
+      <Column Name="JobID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="JobName" Type="System.String" DbType="NVarChar(150) NOT NULL" CanBeNull="false" />
+      <Column Name="Adress" Type="System.String" DbType="NVarChar(250)" CanBeNull="true" />
+      <Column Name="Telphone" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="Mobile" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="Email" Type="System.String" DbType="NChar(10)" CanBeNull="true" />
+    </ElementType>
+  </Function>
+  <Function Name="dbo.spCustomersPayments" Method="spCustomersPayments">
+    <ElementType Name="spCustomersPaymentsResult">
+      <Column Name="CustomerPaymentID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="CustomerID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="CustomerName" Type="System.String" DbType="NVarChar(150) NOT NULL" CanBeNull="false" />
+      <Column Name="PaymentDateM" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="PaymentDateH" Type="System.String" DbType="NVarChar(150) NOT NULL" CanBeNull="false" />
+      <Column Name="Payment" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+    </ElementType>
+  </Function>
+  <Function Name="dbo.spPaymentsForSuppliers" Method="spPaymentsForSuppliers">
+    <ElementType Name="spPaymentsForSuppliersResult">
+      <Column Name="SupplierPaymentID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="SupplierID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="SupplierName" Type="System.String" DbType="NVarChar(150) NOT NULL" CanBeNull="false" />
+      <Column Name="PaymentDateM" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="PaymentDateH" Type="System.String" DbType="NVarChar(150) NOT NULL" CanBeNull="false" />
+      <Column Name="Payment" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+    </ElementType>
+  </Function>
+  <Function Name="dbo.spPurchasesMaster" Method="spPurchasesMaster">
+    <ElementType Name="spPurchasesMasterResult">
+      <Column Name="PurchaseID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="PurchaseDateM" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="PurchaseDateH" Type="System.String" DbType="NVarChar(150)" CanBeNull="true" />
+      <Column Name="SupplierID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="SupplierName" Type="System.String" DbType="NVarChar(150) NOT NULL" CanBeNull="false" />
+      <Column Name="EmployeeID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="EmployeeName" Type="System.String" DbType="NVarChar(150)" CanBeNull="true" />
+      <Column Name="ISCash" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="Notes" Type="System.String" DbType="NVarChar(250)" CanBeNull="true" />
+    </ElementType>
+  </Function>
+  <Function Name="dbo.spPurchasesDetails" Method="spPurchasesDetails">
+    <ElementType Name="spPurchasesDetailsResult">
+      <Column Name="PurchasesDetailID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="PurchaseID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="PurchaseDateM" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="PurchaseDateH" Type="System.String" DbType="NVarChar(150)" CanBeNull="true" />
+      <Column Name="ISCash" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="Notes" Type="System.String" DbType="NVarChar(250)" CanBeNull="true" />
+      <Column Name="SupplierID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="SupplierName" Type="System.String" DbType="NVarChar(150) NOT NULL" CanBeNull="false" />
+      <Column Name="EmployeeID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="EmployeeName" Type="System.String" DbType="NVarChar(150)" CanBeNull="true" />
+      <Column Name="ProductID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="ProductName" Type="System.String" DbType="NVarChar(150) NOT NULL" CanBeNull="false" />
+      <Column Name="CategoryID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="CategoryName" Type="System.String" DbType="NVarChar(150)" CanBeNull="true" />
+      <Column Name="Quantity" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+      <Column Name="Price" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+    </ElementType>
+  </Function>
+  <Function Name="dbo.spSalesDetails" Method="spSalesDetails">
+    <ElementType Name="spSalesDetailsResult">
+      <Column Name="SalesDetailID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="SalesID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="SalesDateM" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="SalesDateH" Type="System.String" DbType="NVarChar(150) NOT NULL" CanBeNull="false" />
+      <Column Name="ISCash" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="Notes" Type="System.String" DbType="NVarChar(250)" CanBeNull="true" />
+      <Column Name="CustomerID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="CustomerName" Type="System.String" DbType="NVarChar(150) NOT NULL" CanBeNull="false" />
+      <Column Name="EmployeeID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="EmployeeName" Type="System.String" DbType="NVarChar(150)" CanBeNull="true" />
+      <Column Name="ProductID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="ProductName" Type="System.String" DbType="NVarChar(150) NOT NULL" CanBeNull="false" />
+      <Column Name="CategoryID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="CategoryName" Type="System.String" DbType="NVarChar(150)" CanBeNull="true" />
+      <Column Name="Quantity" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+      <Column Name="Price" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+    </ElementType>
+  </Function>
+  <Function Name="dbo.spPurchaseDiscardsDetails" Method="spPurchaseDiscardsDetails">
+    <ElementType Name="spPurchaseDiscardsDetailsResult">
+      <Column Name="PurchaseDiscardsDetailID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="PurchaseDiscardsID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="PurchaseDiscardsDateM" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="PurchaseDiscardsDateH" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="IsCash" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="Notes" Type="System.String" DbType="NVarChar(250)" CanBeNull="true" />
+      <Column Name="PurchaseID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="PurchaseDateM" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="PurchaseDateH" Type="System.String" DbType="NVarChar(150)" CanBeNull="true" />
+      <Column Name="SupplierID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="SupplierName" Type="System.String" DbType="NVarChar(150) NOT NULL" CanBeNull="false" />
+      <Column Name="ProductID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="ProductName" Type="System.String" DbType="NVarChar(150) NOT NULL" CanBeNull="false" />
+      <Column Name="Quantity" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+      <Column Name="Price" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+    </ElementType>
+  </Function>
+  <Function Name="dbo.spSalesDiscardsDetails" Method="spSalesDiscardsDetails">
+    <ElementType Name="spSalesDiscardsDetailsResult">
+      <Column Name="SalesDiscardsDetailID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="SalesDiscardsID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="SalesDiscardsDateM" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="SalesDiscardsDateH" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="SalesID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="SalesDateM" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="SalesDateH" Type="System.String" DbType="NVarChar(150) NOT NULL" CanBeNull="false" />
+      <Column Name="CustomerID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="CustomerName" Type="System.String" DbType="NVarChar(150) NOT NULL" CanBeNull="false" />
+      <Column Name="ProductID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="ProductName" Type="System.String" DbType="NVarChar(150) NOT NULL" CanBeNull="false" />
+      <Column Name="Quantity" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+      <Column Name="Price" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+    </ElementType>
+  </Function>
+  <Function Name="dbo.spSalesDiscardsMaster" Method="spSalesDiscardsMaster">
+    <ElementType Name="spSalesDiscardsMasterResult">
+      <Column Name="SalesDiscardsID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="SalesDiscardsDateM" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="SalesDiscardsDateH" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="SalesID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="SalesDateM" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="SalesDateH" Type="System.String" DbType="NVarChar(150) NOT NULL" CanBeNull="false" />
+      <Column Name="CustomerID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="CustomerName" Type="System.String" DbType="NVarChar(150) NOT NULL" CanBeNull="false" />
+      <Column Name="IsCash" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="Notes" Type="System.String" DbType="NVarChar(250)" CanBeNull="true" />
+    </ElementType>
+  </Function>
+  <Function Name="dbo.spProducts" Method="spProducts">
+    <ElementType Name="spProductsResult">
+      <Column Name="ProductID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="ProductName" Type="System.String" DbType="NVarChar(150) NOT NULL" CanBeNull="false" />
+      <Column Name="Price" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="CategoryID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="CategoryName" Type="System.String" DbType="NVarChar(150)" CanBeNull="true" />
+      <Column Name="Description" Type="System.String" DbType="NVarChar(250)" CanBeNull="true" />
+      <Column Name="SQty" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+      <Column Name="UnitID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="UnitName_En" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="UnitName_Ar" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="StartQuantity" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+      <Column Name="Quantity" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+      <Column Name="BasicUnitID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="BasicUnitName_En" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="BasicUnitName_Ar" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+    </ElementType>
+  </Function>
+  <Function Name="dbo.spSalesMaster" Method="spSalesMaster">
+    <ElementType Name="spSalesMasterResult">
+      <Column Name="SalesID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="SalesDateM" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="SalesDateH" Type="System.String" DbType="NVarChar(150) NOT NULL" CanBeNull="false" />
+      <Column Name="CustomerID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="CustomerName" Type="System.String" DbType="NVarChar(150)" CanBeNull="true" />
+      <Column Name="EmployeeID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="EmployeeName" Type="System.String" DbType="NVarChar(150)" CanBeNull="true" />
+      <Column Name="ISCash" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="Notes" Type="System.String" DbType="NVarChar(250)" CanBeNull="true" />
+    </ElementType>
+  </Function>
+  <Function Name="dbo.spPurchaseDiscardsMaster" Method="spPurchaseDiscardsMaster">
+    <ElementType Name="spPurchaseDiscardsMasterResult">
+      <Column Name="PurchaseDiscardsID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="PurchaseDiscardsDateM" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="PurchaseDiscardsDateH" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="PurchaseID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="PurchaseDateM" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="PurchaseDateH" Type="System.String" DbType="NVarChar(150)" CanBeNull="true" />
+      <Column Name="SupplierID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="SupplierName" Type="System.String" DbType="NVarChar(150) NOT NULL" CanBeNull="false" />
+      <Column Name="Notes" Type="System.String" DbType="NVarChar(250)" CanBeNull="true" />
+      <Column Name="TotalReturn" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+    </ElementType>
+  </Function>
+</Database>

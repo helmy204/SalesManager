@@ -1,0 +1,57 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<siteMap xmlns="http://schemas.microsoft.com/AspNet/SiteMap-File-1.0" >
+ 
+    <siteMapNode url="~/Default.aspx" title="Home"  description="Home" >
+      
+    
+    <siteMapNode  title="Main Data">
+      <siteMapNode url="~/admin/ManageCategories.aspx" title="Categories"  description="Categories" />
+      <siteMapNode url="~/admin/ManageProducts.aspx" title="Products"  description="Products" />
+      <siteMapNode url="~/admin/ManageJobs.aspx" title="Jobs"  description="Jobs" />
+      <siteMapNode url="~/admin/ManageEmployees.aspx" title="Employees"  description="Employees" />
+      <siteMapNode url="~/admin/ManageCustomers.aspx" title="Customers"  description="Customers" />
+      <siteMapNode url="~/admin/ManageSuppliers.aspx" title="Suppliers"  description="Suppliers" />
+    </siteMapNode>
+    <siteMapNode title="Daily Transaction">
+      
+      <siteMapNode title="Payments">
+      <siteMapNode url="~/admin/ManageCustomersPayments.aspx" title="Customers"  description="Customers" />
+      <siteMapNode url="~/admin/ManagePaymentsForSuppliers.aspx" title="Suppliers"  description="Suppliers" />
+      </siteMapNode>
+      <siteMapNode title="Purchases">
+        <siteMapNode url="~/admin/ManagePurchases.aspx" title="Purchases" description ="Purchases"></siteMapNode>
+        <siteMapNode url="~/admin/ManagePurchaseDiscards.aspx" title="Returns" description ="Returns"></siteMapNode>
+      </siteMapNode>
+      <siteMapNode title="Sales">
+        <siteMapNode url="~/admin/ManageSales.aspx" title="Sales" description ="Sales"></siteMapNode>
+        <siteMapNode url="~/admin/ManageSalesDiscards.aspx" title="Returns" description ="Returns"></siteMapNode>
+      </siteMapNode>
+      
+    </siteMapNode>
+      <siteMapNode title="Reports">
+        <siteMapNode title="Sales">
+          <siteMapNode url="~/Reports/rptSalesByPeriod.aspx" title="SalesByPeriod" description ="SalesByPeriod"></siteMapNode>         
+        </siteMapNode>
+        
+        <siteMapNode title="Purchases">
+          <siteMapNode url="~/Reports/rptPurchasesByPeriod.aspx" title="PurchasesByPeriod" description ="PurchasesByPeriod"></siteMapNode>
+        </siteMapNode>
+
+        <siteMapNode title="Balance">
+          <siteMapNode url="~/Reports/rptCustomersBalance.aspx" title="Customers" description ="Customers"></siteMapNode>
+          <siteMapNode url="~/Reports/rptSuppliersBalance.aspx" title="Suppliers" description ="Suppliers"></siteMapNode>
+         
+        </siteMapNode>
+        <siteMapNode title="Products">
+        <siteMapNode url="~/Reports/rptProductsQuantities.aspx" title="Quantities" description ="Quantities"></siteMapNode>
+        </siteMapNode>
+
+        <siteMapNode title="Customers">
+          <siteMapNode url="~/Reports/rptCustomerStatmentAccount.aspx" title="StatmentAccount" description ="StatmentAccount"></siteMapNode>
+        </siteMapNode>
+        <siteMapNode title="Suppliers">
+          <siteMapNode url="~/Reports/rptSupplierStatmentAccount.aspx" title="StatmentAccount" description ="StatmentAccount"></siteMapNode>
+        </siteMapNode>
+        </siteMapNode>
+  </siteMapNode>
+</siteMap>

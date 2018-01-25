@@ -1,0 +1,44 @@
+USE [SalesDB]
+GO
+
+/****** Object:  Table [dbo].[SalesDetails]    Script Date: 03/17/2012 10:37:20 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[SalesDetails](
+	[SalesDetailID] [int] IDENTITY(1,1) NOT NULL,
+	[SalesID] [int] NOT NULL,
+	[ProductID] [int] NOT NULL,
+	[Quantity] [float] NOT NULL,
+	[UnitID] [int] NOT NULL,
+	[BasicUnitID] [int] NOT NULL,
+	[PUnitPrice] [float] NOT NULL,
+	[UnitPrice] [float] NOT NULL,
+	[TotalPrice] [float] NOT NULL,
+	[PQTY] [float] NOT NULL,
+ CONSTRAINT [PK_SalesDetails] PRIMARY KEY CLUSTERED 
+(
+	[SalesDetailID] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+
+ALTER TABLE [dbo].[SalesDetails]  WITH CHECK ADD  CONSTRAINT [FK_SalesDetails_Products] FOREIGN KEY([ProductID])
+REFERENCES [dbo].[Products] ([ProductID])
+GO
+
+ALTER TABLE [dbo].[SalesDetails] CHECK CONSTRAINT [FK_SalesDetails_Products]
+GO
+
+ALTER TABLE [dbo].[SalesDetails]  WITH CHECK ADD  CONSTRAINT [FK_SalesDetails_SalesMaster] FOREIGN KEY([SalesID])
+REFERENCES [dbo].[SalesMaster] ([SalesID])
+GO
+
+ALTER TABLE [dbo].[SalesDetails] CHECK CONSTRAINT [FK_SalesDetails_SalesMaster]
+GO
+
+

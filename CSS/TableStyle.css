@@ -1,0 +1,134 @@
+﻿
+/*
+.box {
+background-color: #CCC;
+border: thin #333 solid;
+width:580px;
+margin-top: 40px;
+margin-bottom:10px;
+padding: 18px;
+}
+
+table.helpT
+{ text-align: center;
+font-family: Verdana;
+font-weight: normal;
+font-size: 11px;
+color: #404040;
+width: 500px;
+background-color: #fafafa;
+border: 1px #6699CC solid;
+border-collapse: collapse;
+border-spacing: 0px; } 
+
+td.helpHed
+{ border-bottom: 2px solid #6699CC;
+border-left: 1px solid #6699CC;
+background-color: #BEC8D1;
+text-align: left;
+text-indent: 5px;
+font-family: Verdana;
+font-weight: bold;
+font-size: 11px;
+color: #404040; }
+
+td.helpBod
+{ border-bottom: 1px solid #9CF;
+border-top: 0px;
+border-left: 1px solid #9CF;
+border-right: 0px;
+text-align: left;
+text-indent: 10px;
+font-family: Verdana, sans-serif, Arial;
+font-weight: normal;
+font-size: 11px;
+color: #404040;
+background-color: #fafafa; }
+
+table.sofT
+{ text-align: center;
+font-family: Verdana;
+font-weight: normal;
+font-size: 11px;
+color: #404040;
+width: 580px;
+background-color: #fafafa;
+border: 1px #6699CC solid;
+border-collapse: collapse;
+border-spacing: 0px; }
+
+td.Cell
+{ border-bottom: 1px solid Gray;
+border-top: 0px;
+border-left: 1px solid Gray;
+border-right: 0px;
+text-align: left;
+text-indent: 10px;
+font-family: Verdana, sans-serif, Arial;
+font-weight: normal;
+font-size: 11px;
+color: #404040;
+background-color: #fafafa; 
+
+}
+*/
+
+/*
+another style and this is working
+*/
+
+  TABLE.mytable
+  { 
+     font-family:Tahoma;
+     border-collapse:collapse;
+     font-size:10pt;
+     background-color:#ffffff;
+     width:500px;
+     border-style:solid;
+     border-color:gray;
+     border-width:1px;
+       text-align:center;
+  }
+
+  TH.mytable
+  {
+     font-size:10pt;
+     background-color:LightGrey;
+     color:Black;
+     border-style:solid;
+     border-width:1px;
+  }
+
+
+  TR.mytable
+  { 
+  }
+
+  TD.mytable
+  {  
+     font-size:10pt;
+     background-color:white;
+     color:black;
+     border-style:solid;
+     border-width:1px;
+     text-align:center;
+  }
+   TD.xcaption
+  {
+     background-color:#f0f0f0;
+     color:black;
+     border-style:solid;
+     border-width:2px;
+     border-color:black;
+     text-align:center;
+     
+  }
+ TR.xcaption
+  {
+     background-color:#f0f0f0;
+     color:black;
+     border-style:solid;
+     border-width:2px;
+     border-color:black;
+     text-align:center;
+  }

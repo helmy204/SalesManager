@@ -1,0 +1,68 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+using System.Data.ElkhateebDynamicLinq;
+using System.Globalization;
+using Microsoft.Reporting.WebForms;
+public partial class Reports_rptCustomerStatmentAccount : System.Web.UI.Page
+{
+
+
+    CultureInfo culture = new CultureInfo("en-US");
+
+    void FillReport()
+    {
+        Customer objCustomer = new Customer();
+        var q  = objCustomer.Filter (p => p.CustomerName.ToLower() == txtCustomer.Text.ToLower());
+        if (q.Count() > 0)
+        {
+            int CustomerID = q.First().CustomerID;
+            ReportViewer1.Visible = true;
+            dsSalesManager ds = new dsSalesManager();
+            ds.EnforceConstraints = false;
+            dsSalesManagerTableAdapters.spCustomerStatmentAccountTableAdapter dap = new dsSalesManagerTableAdapters.spCustomerStatmentAccountTableAdapter();
+
+            dap.Fill(ds.spCustomerStatmentAccount, Convert.ToDateTime(txtStartDate.Text, culture), Convert.ToDateTime(txtEndDate.Text, culture), CustomerID);
+            ReportParameter p1 = new ReportParameter("StartDate", txtStartDate.Text, true);
+            ReportParameter p2 = new ReportParameter("EndDate", txtEndDate.Text, true);
+            ReportViewer1.LocalReport.SetParameters(new ReportParameter[] { p1, p2 });
+            Microsoft.Reporting.WebForms.ReportDataSource rds = new Microsoft.Reporting.WebForms.ReportDataSource("dsSalesManager_spCustomerStatmentAccount", ds.spCustomerStatmentAccount);
+            ReportViewer1.LocalReport.ReportPath = "Reports\\rdlc\\rptCustomerStatmentAccount.rdlc";
+            ReportViewer1.LocalReport.DataSources.Clear();
+            ReportViewer1.LocalReport.DataSources.Add(rds);
+            ReportViewer1.LocalReport.Refresh();
+        }
+        else
+        {
+            MessageBox.Show(this.Page, " Customer Not Found.");
+        }
+    }
+    protected void Page_Load(object sender, EventArgs e)
+    {
+
+    }
+    protected void imgbtnSave_Click(object sender, ImageClickEventArgs e)
+    {
+        FillReport();
+        Clear();
+    }
+    protected void imgbtnClear_Click(object sender, ImageClickEventArgs e)
+    {
+        Clear();
+    }
+    void Clear()
+    {
+       txtCustomer.Text = txtStartDate.Text = txtEndDate.Text = string.Empty;
+    }
+
+    [System.Web.Services.WebMethodAttribute(), System.Web.Script.Services.ScriptMethodAttribute()]
+    public static string[] GetCompletionList(string prefixText, int count, string contextKey)
+    {
+        Customer objCustomer = new Customer ();
+        return objCustomer.Get(p => p.CustomerName.ToLower().StartsWith(prefixText), p => p.CustomerName).ToArray();
+
+    }
+}

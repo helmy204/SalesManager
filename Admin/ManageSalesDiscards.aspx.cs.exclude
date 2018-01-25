@@ -1,0 +1,449 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+using System.Data.ElkhateebDynamicLinq;
+using System.Globalization;
+using System.Data;
+public partial class Admin_ManageSalesDiscards : System.Web.UI.Page
+{
+
+
+    #region Objects
+    SalesDiscardsMaster objSalesDiscardsMaster = new SalesDiscardsMaster();
+    spSalesDiscardsMasterResult objspSalesDiscardsMasterResult = new spSalesDiscardsMasterResult();
+
+    SalesDiscardsDetail objSalesDiscardsDetail = new SalesDiscardsDetail();
+    spSalesDiscardsDetailsResult objspSalesDiscardsDetailsResult = new spSalesDiscardsDetailsResult();
+
+     SalesMaster objSalesMaster = new SalesMaster();
+    spSalesMasterResult objSalesMasterResult = new spSalesMasterResult();
+
+    SalesDetail objSalesDetail = new SalesDetail();
+    spSalesDetailsResult objSalesDetailsResult = new spSalesDetailsResult();
+    Customer objCustomer = new Customer();
+    Product objProduct = new Product();
+    CultureInfo culture = new CultureInfo("en-US");
+
+
+    static bool oldPaymentType;
+   
+    static int oldSalesDiscardsID;
+    #endregion
+
+    #region Methods
+
+    void Clear()
+    {
+        txtID.Text = txtNotes.Text = txtSalesDiscardsDateM.Text = txtSalesDiscardsDateH.Text = string.Empty;
+        ddlSales.SelectedIndex =  0;
+        cboxIsCash.Checked = false;
+        gvSalesDiscards.SelectedIndex = -1;
+        ddlSales.Enabled = true;
+        pnlProduct.Visible = false;
+        hfCustomer.Value = string.Empty;
+        gvProducts.DataBind();
+
+    }
+    void FillddlSales()
+    {
+        ddlSales.DataSource = objSalesMaster.Get();
+        ddlSales.DataTextField = "SalesID";
+        ddlSales.DataValueField = "SalesID";
+        ddlSales.DataBind();
+    }
+    
+    void FillgvSalesDiscards()
+    {
+        object[] parameter = null;
+        gvSalesDiscards.DataSource = objspSalesDiscardsMasterResult.Get(parameter).ToList();
+        gvSalesDiscards.DataBind();
+    }
+   
+    
+    void FillgvProducts(int SalesDiscardsID)
+    {
+        object[] parameter = null;
+        gvProducts.DataSource = objspSalesDiscardsDetailsResult.Filter(parameter ,p => p.SalesDiscardsID == SalesDiscardsID);
+        gvProducts.DataBind();
+    }
+    void CalculateTotalPrice(GridViewRow gvrow)
+    {
+
+        TextBox txtQuantity = (TextBox)gvrow.FindControl("txtQuantity");
+        Label txtPrice = (Label)gvrow.FindControl("lblPrice");
+        TextBox txtTotalPrice = (TextBox)gvrow.FindControl("txtTotalPrice");
+
+        if (string.IsNullOrEmpty(txtQuantity.Text))
+            txtQuantity.Text = "0";
+        if (string.IsNullOrEmpty(txtPrice.Text))
+            txtPrice.Text = "0";
+
+
+        txtTotalPrice.Text = Convert.ToString(Convert.ToDouble(txtQuantity.Text.Trim()) * Convert.ToDouble(txtPrice.Text.Trim()));
+        
+
+    }
+    void CalculateTotalSalesDiscards()
+    {
+        
+            lblTotalSalesDiscardsPrice.Text = "0";
+        foreach (GridViewRow gvrow in gvProducts.Rows)
+        lblTotalSalesDiscardsPrice.Text = Convert.ToString(Convert.ToDouble(lblTotalSalesDiscardsPrice.Text) +Convert.ToDouble(((TextBox )gvrow.FindControl("txtTotalPrice")).Text  ));
+       
+    }
+    bool Insert()
+    {
+        int identity;
+        objSalesDiscardsMaster = new SalesDiscardsMaster();
+        objSalesDiscardsMaster.BeginTransaction();
+        objSalesDiscardsMaster.SalesID = int.Parse(ddlSales.SelectedValue);       
+        objSalesDiscardsMaster.SalesDiscardsDateM = Convert.ToDateTime(txtSalesDiscardsDateM.Text.Trim(), culture);
+        objSalesDiscardsMaster.SalesDiscardsDateH = txtSalesDiscardsDateH.Text.Trim();
+        objSalesDiscardsMaster.Notes = txtNotes.Text.Trim();
+        objSalesDiscardsMaster.IsCash = cboxIsCash.Checked;
+
+         identity = Convert.ToInt32(objSalesDiscardsMaster.Insert());
+
+        double TotalSalesDiscardsPrice = 0;
+        for (int i = 0; i < gvProducts.Rows.Count ;i++ )
+        {
+            GridViewRow gvrow = gvProducts.Rows[i];
+            objSalesDiscardsDetail = new SalesDiscardsDetail();
+            objSalesDiscardsDetail.SalesDiscardsID = identity;
+            objSalesDiscardsDetail.ProductID = Convert.ToInt32((gvrow.FindControl("lblProductID") as Label).Text);
+            objSalesDiscardsDetail.Quantity = Convert.ToDouble((gvrow.FindControl("txtQuantity") as TextBox).Text);
+            objSalesDiscardsDetail.Price = Convert.ToDouble((gvrow.FindControl("lblPrice") as Label).Text);
+            TotalSalesDiscardsPrice += objSalesDiscardsDetail.Quantity * objSalesDiscardsDetail.Price;
+
+            
+          objSalesDiscardsDetail.Insert();
+        }
+
+        if (cboxIsCash.Checked != true)
+        {
+            objCustomer = objCustomer.Single(p => p.CustomerID == int.Parse(hfCustomer.Value));
+            objCustomer.Balance -= TotalSalesDiscardsPrice;
+            objCustomer.Update(p => p.CustomerID == objCustomer.CustomerID);
+        }
+
+
+        objSalesDiscardsMaster.EndTransaction();
+
+        
+        
+        return true;
+    }
+    bool Update()
+    {
+        objSalesDiscardsMaster = new SalesDiscardsMaster();
+        objSalesDiscardsMaster.BeginTransaction();
+        objSalesDiscardsMaster.SalesDiscardsID = int.Parse(txtID.Text.Trim());
+        objSalesDiscardsMaster.SalesID = int.Parse(ddlSales.SelectedValue);
+        objSalesDiscardsMaster.SalesDiscardsDateM = Convert.ToDateTime(txtSalesDiscardsDateM.Text.Trim(), culture);
+        objSalesDiscardsMaster.SalesDiscardsDateH = txtSalesDiscardsDateH.Text.Trim();
+        objSalesDiscardsMaster.Notes = txtNotes.Text.Trim();
+        objSalesDiscardsMaster.IsCash = cboxIsCash.Checked;
+        objSalesDiscardsMaster.Update(p => p.SalesDiscardsID == objSalesDiscardsMaster.SalesDiscardsID);
+
+        var q=objSalesDiscardsDetail.Filter(p => p.SalesDiscardsID == objSalesDiscardsMaster.SalesDiscardsID).Select(p => (p.Price * p.Quantity));
+        double oldTotalSalesDiscardsPrice =(q!=null )?q.Sum():0; 
+
+        double TotalSalesDiscardsPrice = 0;
+        for (int i = 0; i < gvProducts.Rows.Count; i++)
+        {
+            GridViewRow gvrow = gvProducts.Rows[i];
+            objSalesDiscardsDetail = new SalesDiscardsDetail();
+            objSalesDiscardsDetail.SalesDiscardsID = objSalesDiscardsMaster.SalesDiscardsID;
+            objSalesDiscardsDetail.ProductID = Convert.ToInt32((gvrow.FindControl("lblProductID") as Label).Text);
+            objSalesDiscardsDetail.Quantity = Convert.ToDouble((gvrow.FindControl("txtQuantity") as TextBox).Text);
+            objSalesDiscardsDetail.Price = Convert.ToDouble((gvrow.FindControl("lblPrice") as Label).Text);
+            TotalSalesDiscardsPrice += objSalesDiscardsDetail.Quantity * objSalesDiscardsDetail.Price;
+
+            int SalesDiscardsDetailID = Convert.ToInt32((gvrow.FindControl("lblSalesDiscardsDetailID") as Label).Text);
+            if (SalesDiscardsDetailID  == 0)
+            {
+                objSalesDiscardsDetail.Insert(); 
+                continue;
+            }
+            objSalesDiscardsDetail.SalesDiscardsDetailID = SalesDiscardsDetailID;
+            objSalesDiscardsDetail.Update(p => p.SalesDiscardsDetailID == objSalesDiscardsDetail.SalesDiscardsDetailID);
+
+
+        }
+
+        //========= composite calcualtion balance --- compare between old value and new  value 
+        if (oldPaymentType != true)// not cash
+        {
+
+            // any way( - balance) form old Customer if user change Customer 
+            objCustomer = objCustomer.Single(p => p.CustomerID == int.Parse(hfCustomer.Value));
+            objCustomer.Balance += oldTotalSalesDiscardsPrice;
+            objCustomer.Update(p => p.CustomerID == objCustomer.CustomerID);
+
+            if (cboxIsCash.Checked != true)// if (not cash) add new price to balance 
+            {
+
+                objCustomer = objCustomer.Single(p => p.CustomerID == int.Parse(hfCustomer.Value));
+                objCustomer.Balance -= TotalSalesDiscardsPrice;
+                objCustomer.Update(p => p.CustomerID == objCustomer.CustomerID);
+            }
+        }
+        else if (oldPaymentType == true)//  cash
+        {
+
+            if (cboxIsCash.Checked != true)  // if user change to (not cash) will add new price to SalesDiscardssMaster balance
+            {
+
+                objCustomer = objCustomer.Single(p => p.CustomerID == int.Parse(hfCustomer.Value));
+                objCustomer.Balance += TotalSalesDiscardsPrice;
+                objCustomer.Update(p => p.CustomerID == objCustomer.CustomerID);
+            }
+        }
+
+        objSalesDiscardsMaster.EndTransaction();
+      
+        return true;
+    }
+    void Dir(spSalesDiscardsMasterResult entity)
+    {
+        txtID.Text = entity.SalesDiscardsID.ToString();
+        ddlSales.SelectedValue = entity.SalesID.ToString();
+        ddlSales.Enabled = false;
+        hfCustomer.Value  = entity.CustomerID.ToString();
+        
+        txtNotes.Text = entity.Notes;
+        txtSalesDiscardsDateM.Text = entity.SalesDiscardsDateM.ToString("MM/dd/yyyy", culture);
+        txtSalesDiscardsDateH.Text = entity.SalesDiscardsDateH;
+        cboxIsCash.Checked = entity.IsCash ;
+
+        
+        oldPaymentType = entity.IsCash;
+        pnlProduct .Visible = true;
+        FillgvProducts(entity.SalesDiscardsID);
+       
+    }
+
+    bool Delete(int SalesDiscardsID)
+    {
+        objSalesDiscardsDetail.BeginTransaction();
+        double discardvalue = objSalesDiscardsDetail.Get(p => p.SalesDiscardsID == SalesDiscardsID, p => p.Quantity * p.Price ).Sum();
+        object[] parameter = null;
+        objspSalesDiscardsMasterResult = objspSalesDiscardsMasterResult.Single(parameter, p => p.SalesDiscardsID == SalesDiscardsID);
+
+        if (objspSalesDiscardsMasterResult.IsCash != true)// if (not cash) add new price to balance 
+        {
+
+            objCustomer = objCustomer.Single(p => p.CustomerID == objspSalesDiscardsMasterResult.CustomerID );
+            objCustomer.Balance += discardvalue;
+            objCustomer.Update(p => p.CustomerID == objCustomer.CustomerID);
+        }
+
+
+        bool status=     objSalesDiscardsMaster.Delete(p => p.SalesDiscardsID == SalesDiscardsID);
+
+        objSalesDiscardsMaster.EndTransaction();
+       return  status;
+        
+
+    }
+   
+
+
+    void GetSalesDiscards(int SalesDiscardsID)
+    {
+        object[] parameter = null;
+        gvSalesDiscards.DataSource = objspSalesDiscardsMasterResult.Filter(parameter, p => p.SalesDiscardsID == SalesDiscardsID).ToList();
+        gvSalesDiscards.DataBind();
+    }
+
+    void GetSales(int SalesMasterID)
+    {
+        // get all quantity of  product in purchsae - quantity of product in discards for the same Sales
+        object[] parameter = null;
+        var SalesProducts =objSalesDetailsResult.Filter(parameter, p => p.SalesID == SalesMasterID).Select (p=> new { SalesDiscardsDetailID = 0, SalesDiscardsID = 0, ProductID = p.ProductID, ProductName = p.ProductName, Quantity =p.Quantity, Price = p.Price, CustomerID =p.CustomerID, CustomerName = p.CustomerName }).ToList();
+
+        var DiscardProducts = objspSalesDiscardsDetailsResult.Filter(parameter, p => p.SalesID == SalesMasterID).ToList();
+        if (DiscardProducts.Count  == 0)// first time 
+        {
+            gvProducts.DataSource = SalesProducts;
+            gvProducts.DataBind();
+            hfCustomer.Value = SalesProducts.First().CustomerID.ToString();
+        }
+        else
+        {
+            var q = SalesProducts.Select(p => new { SalesDiscardsDetailID = 0, SalesDiscardsID = 0, ProductID = p.ProductID, ProductName = p.ProductName, Quantity = (p.Quantity -( DiscardProducts.Where(z=>z.ProductID== p.ProductID).Select(a=>a.Quantity).Sum())), Price = p.Price, CustomerID = p.CustomerID, CustomerName = p.CustomerName });
+            gvProducts.DataSource = q;
+            gvProducts.DataBind();
+            hfCustomer.Value = q.First().CustomerID.ToString();
+        }
+    }
+    #endregion
+
+
+
+
+    #region Events
+    protected void Page_Load(object sender, EventArgs e)
+    {
+        if (!IsPostBack)
+        {
+            this.Title = "Manage SalesDiscards ";
+            FillddlSales();            
+            FillgvSalesDiscards();
+            
+        }
+       
+    }
+    protected void imgbtnSave_Click(object sender, ImageClickEventArgs e)
+    {
+        System.Threading.Thread.Sleep(2000);
+        if (gvSalesDiscards.SelectedIndex == -1)
+        {
+
+            if (Insert())
+            {
+                mdl_Sucess.Show();
+            }
+            else
+            {
+                mdl_Fail.Show();
+            }
+        }
+        else if (gvSalesDiscards.SelectedIndex > -1)
+        {
+
+            if (Update())
+            {
+                mdl_Sucess.Show();
+            }
+            else
+            {
+                mdl_Fail.Show();
+            }
+        }
+
+        FillgvSalesDiscards();
+        
+        Clear();
+    }
+    protected void imgbtnClear_Click(object sender, ImageClickEventArgs e)
+    {
+      
+        FillgvSalesDiscards();
+        Clear();
+
+    }
+    protected void gvSalesDiscards_RowCommand(object sender, GridViewCommandEventArgs e)
+    {
+        int SalesDiscardsID = Convert.ToInt32(e.CommandArgument);
+        if (e.CommandName == "select")
+        {
+            object[] parameter = null;
+            Dir(objspSalesDiscardsMasterResult.Single(parameter,p => p.SalesDiscardsID == SalesDiscardsID));
+        }
+        else if (e.CommandName == "del")
+        {
+            try
+            {
+                System.Threading.Thread.Sleep(2000);
+                if (Delete(SalesDiscardsID))
+                {
+                    mdl_Sucess.Show();
+                    FillgvSalesDiscards();
+                   
+                    Clear();
+                }
+                else
+                {
+                    mdl_Fail.Show();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(this.Page, "this filed linked With other data");
+            }
+
+        }
+    }
+    protected void gvSalesDiscards_PageIndexChanging(object sender, GridViewPageEventArgs e)
+    {
+        gvSalesDiscards.PageIndex = e.NewPageIndex;
+        FillgvSalesDiscards();
+    }
+    protected void txtSalesDiscardsDateM_TextChanged(object sender, EventArgs e)
+    {
+        if (txtSalesDiscardsDateM.Text != string.Empty)
+            txtSalesDiscardsDateH.Text = CustomsConverter.GetHijriDate(txtSalesDiscardsDateM.Text);
+    }
+    protected void ddlSales_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        if (ddlSales.SelectedIndex > 0)
+        {
+            pnlProduct.Visible = true;
+            GetSales(int.Parse(ddlSales.SelectedValue));
+            
+        }
+        else
+        {
+            pnlProduct.Visible = false;
+            gvProducts.DataBind();
+            hfCustomer.Value = string.Empty;
+        }
+    }
+
+    #region Products
+    
+    protected void txtQuantity_TextChanged(object sender, EventArgs e)
+    {
+        GridViewRow gvrow = (GridViewRow)((TextBox)sender).NamingContainer;
+        CalculateTotalPrice(gvrow);
+        CalculateTotalSalesDiscards();
+    }    
+    protected void gvProducts_RowDataBound(object sender, GridViewRowEventArgs e)
+    {
+        if (e.Row.RowType == DataControlRowType.DataRow)
+        {
+            
+            CalculateTotalPrice(e.Row);
+            
+        }
+    }
+    protected void gvProducts_DataBound(object sender, EventArgs e)
+    {
+        CalculateTotalSalesDiscards();
+    }
+    #endregion
+    #endregion
+
+
+
+    #region Search
+    protected void imgbtnSearch_Click(object sender, ImageClickEventArgs e)
+    {
+        if (!string.IsNullOrEmpty(txtSearchValue.Text))
+        {
+            GetSalesDiscards(int.Parse(txtSearchValue.Text.Trim()));
+        }
+    }
+
+    [System.Web.Services.WebMethodAttribute(), System.Web.Script.Services.ScriptMethodAttribute()]
+    public static string[] GetCompletionList(string prefixText, int count, string contextKey)
+    {
+        SalesDiscardsMaster objSalesDiscardsMaster = new SalesDiscardsMaster();
+        return objSalesDiscardsMaster.Get(p => p.SalesDiscardsID.ToString().ToLower().StartsWith(prefixText.ToLower()), p => p.SalesDiscardsID.ToString()).ToArray();
+    }
+
+    #endregion
+
+
+
+
+
+
+
+
+    
+}

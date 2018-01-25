@@ -1,0 +1,128 @@
+<%@ Page  Language="C#" MasterPageFile="~/MasterPage.master" AutoEventWireup="true" CodeFile="rptSalesByPeriod.aspx.cs" Inherits="Reports_rptSalesByPeriod" Title="Sales During Period" %>
+
+<%@ Register Assembly="Microsoft.ReportViewer.WebForms, Version=9.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a"
+    Namespace="Microsoft.Reporting.WebForms" TagPrefix="rsweb" %>
+
+<%@ Register assembly="AjaxControlToolkit" namespace="AjaxControlToolkit" tagprefix="cc1" %>
+
+<asp:Content ID="Content1" ContentPlaceHolderID="ContentPlaceHolder1" Runat="Server">
+
+    <script language="javascript" type="text/javascript" >
+
+      
+    //--- To Show Modal Popup of ValidationSummary
+    function ShowModalDialog(group) {
+    var g='';
+    g=group ;
+    var vs = document.getElementById ('<%=ValidationSummary3.ClientID %>');
+         vs.validationGroup=g ;
+        var x = $find('<%=ModalExtnd1.ClientID %>');
+        
+        Page_ClientValidate(g );
+        if (!Page_IsValid)
+            x.show();
+      
+
+    }
+</script>
+
+<asp:Panel ID="pnlControl" runat="server" GroupingText="Sales During Period " 
+        DefaultButton="imgbtnShow" >
+      <asp:UpdatePanel ID="upnlControl" runat="server">
+        <ContentTemplate>
+        <table width="100%">
+        <tr>
+        <td style="width: 147px" class="tableCell">
+            <asp:Label ID="lblStartDate" runat="server" Text="Start Period : "></asp:Label>
+            </td>
+        <td>
+            <asp:TextBox ID="txtStartDate" runat="server"></asp:TextBox>
+            <cc1:CalendarExtender ID="txtStartDate_CalendarExtender" runat="server" 
+                Enabled="True" TargetControlID="txtStartDate">
+            </cc1:CalendarExtender>
+            <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" 
+                ControlToValidate="txtStartDate" Display="Dynamic" 
+                ErrorMessage="Enter Start Period." ValidationGroup="i">*</asp:RequiredFieldValidator>
+            </td>
+        </tr>
+        <tr>
+        <td style="width: 147px; height: 15px;" class="tableCell">
+            <asp:Label ID="lblEndDate" runat="server" Text="End Period :"></asp:Label>
+            </td>
+        <td style="height: 15px">
+            <asp:TextBox ID="txtEndDate" runat="server"></asp:TextBox>
+            <cc1:CalendarExtender ID="txtEndDate_CalendarExtender" runat="server" 
+                Enabled="True" TargetControlID="txtEndDate">
+            </cc1:CalendarExtender>
+            <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" 
+                ControlToValidate="txtEndDate" Display="Dynamic" 
+                ErrorMessage="Enter End  Period." ValidationGroup="i">*</asp:RequiredFieldValidator>
+            </td>
+        </tr>
+        <tr>
+        <td style="width: 147px"></td>
+        <td>
+       
+    <asp:ImageButton ID="imgbtnShow" runat="server" Height="35px" 
+        ImageAlign="Middle" ImageUrl="~/img/report.png"   
+                OnClientClick ="ShowModalDialog('i')" AlternateText="Show" ToolTip="Show" 
+                onclick="imgbtnSave_Click"/>
+  
+    <asp:ImageButton ID="imgbtnClear" runat="server" Height="35px" 
+        ImageAlign="Middle" ImageUrl="~/img/Reset.png" 
+                CausesValidation="false" AlternateText="Clear" ToolTip="Clear" 
+                onclick="imgbtnClear_Click"  />
+        </td>
+        </tr>
+        </table>
+        </ContentTemplate>
+          <Triggers>
+              <asp:PostBackTrigger ControlID="imgbtnShow" />
+          </Triggers>
+        </asp:UpdatePanel>
+    </asp:Panel>
+    <asp:Panel ID="pnlReport" runat="server">
+        <rsweb:ReportViewer ID="ReportViewer1" runat="server" 
+    Font-Names="Verdana" Font-Size="8pt" Height="400px" Width="100%" Visible="False">
+            <LocalReport ReportPath="Reports\rdlc\rptSalesByPeriod.rdlc">
+              
+            </LocalReport>
+        </rsweb:ReportViewer>
+      
+    </asp:Panel>
+    
+    <cc1:ModalPopupExtender ID="ModalExtnd1" runat="server" 
+    TargetControlID="lblHidden"
+    PopupControlID="SummaryDiv" 
+    BackgroundCssClass="modalBackground" DynamicServicePath="" Enabled="True" CancelControlID="btnclose" >
+</cc1:ModalPopupExtender>
+   
+<div id="SummaryDiv" runat="server" align="center" class="confirm" style="display:none" >
+    <table align="center" class="confirmtable" >
+        <tr>
+        <td valign="top">
+            <img align="middle" src="../img/warning.gif" />
+            <asp:Label ID="LabelMsg" runat="server" Text="PLZ,Enter The following :-" 
+                ></asp:Label>
+            &nbsp;&nbsp;</td>
+        </tr>
+        <tr>
+        <td colspan="2" align="left" >
+             <asp:ValidationSummary ID="ValidationSummary3" runat="server" 
+                   />
+            </td>
+        </tr>
+        <tr>
+        <td colspan="2">
+        <asp:Button ID="btnclose" runat="server" Text="Close" 
+                 />
+        
+            <%--End of Sucess ModalPopup --%>
+         </td>
+        </tr>
+    </table>      
+</div>
+<asp:Label ID="lblHidden" runat="server" Text="hidden" CssClass="hidelbl"      ></asp:Label>
+</asp:Content>
+
+

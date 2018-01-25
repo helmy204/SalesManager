@@ -1,0 +1,256 @@
+﻿body {
+}
+.Panel {
+font-family: Verdana, Tahoma, Helvetica, Arial, sans-serif;
+}
+.txtBoxbtnSearch {
+border:1px solid #666666;
+margin: 0.3em 0 0.8em 0.2em;
+
+}
+.lblSearch {
+border:1px solid #666666;
+margin: 0.3em 0 0.8em 0.2em;
+background-color :Black   ;
+color:White ;
+font-size :medium ;
+}
+.ResultMessage
+{
+	color :Red ;
+	font-family :Georgia ;
+	font-weight :bold ;
+	background-color :#66FF99 ;
+}
+.h1 {
+margin-top: 0;
+padding: 0.2em;
+font-family: Verdana, Tahoma, Helvetica, Arial, sans-serif;
+font-size: 1.2em;
+background-color:rgb(190,190,190) ;
+color:  White  ;
+}
+
+
+.Tb{clear:both; width:400px; margin:2.0em 0 0.2em 20px; table-layout: fixed; border-collapse:collapse; empty-cells:show; background-color:rgb(233,232,244);}
+Tb th.top {height:3.5em; padding:0 7px 0 7px; empty-cells:show; background-color:rgb(175,175,175);  color:rgb(255,255,255); font-weight:bold; font-size:110%;}
+Tb th {height:3.0em; padding:2px 20px 2px 7px; border-left:solid 2px rgb(255,255,255); border-right:solid 2px rgb(255,255,255); border-top:solid 2px rgb(255,255,255); border-bottom:solid 2px rgb(255,255,255); background-color:rgb(225,225,225);  color:rgb(80,80,80); font-weight:bold; font-size:110%;}
+Tb td {height:3.0em; padding:2px 7px 2px 7px; border-left:solid 2px rgb(255,255,255); border-right:solid 2px rgb(255,255,255); border-top:solid 2px rgb(255,255,255); border-bottom:solid 2px rgb(255,255,255); background-color:rgb(225,225,225);  font-weight:normal; color:rgb(80,80,80); font-size:110%;}
+.WaterMark
+{
+	color :Gray ;
+}
+.roundedPanel
+        {
+           
+            border-color :rgb(173,255,47);
+        }
+         /*--- Another CSS for UpdateProgress --*/
+.progressBackgroundFilter {
+    position:fixed; 
+    top:0px; 
+    bottom:0px; 
+    left:0px;
+    right:0px;
+    overflow:hidden; 
+    padding:0; 
+    margin:0; 
+    background-color:#000; 
+    filter:alpha(opacity=50); 
+    opacity:0.5; 
+    z-index:1000; 
+}
+
+.processMessage { 
+    position:fixed; 
+    top:30%; 
+    left:43%;
+    padding:10px; 
+    width:10%; 
+    z-index:1001; 
+    background-color:#fff;
+    border:solid 1px #000;
+}
+
+.menu {
+	text-indent:50px;
+	   }
+
+.close {	
+    DISPLAY: block;	
+    BACKGROUND: url(images/close24.png) no-repeat 0px 0px;	
+    LEFT: -5px;	
+    WIDTH: 26px;	
+    TEXT-INDENT: -1000em;	
+    POSITION: absolute;	
+    TOP: -7px;	
+    HEIGHT: 26px;	
+}  
+/*-------------------------------*/     
+
+ /*-- for ModalPopup --*/
+ .modalBackground 
+ {
+background-color:#000; 
+    filter:alpha(opacity=50); 
+    opacity:0.5; 
+z-index: 10000;
+}
+        
+.confirm
+{
+background-color:White;
+border-style:solid; 
+border-color: Orange;
+padding:10px;
+font-family:Arial;
+font-size: 11px;
+}
+.confirmtable
+{
+background-color:White;
+border-style:none; 
+border-color: Silver;
+padding:10px;
+font-family:Arial;
+font-size: 11px;
+}
+.confirmbutton
+{
+font-family:Arial;
+font-size: 11px;
+}
+/*-------------------------------*/     
+
+.hidelbl{display:none;}
+/*------- According Pane*/
+.accordionLink
+
+{ 
+	color:White ;
+}
+.accordionHeader
+{
+    border: 1px solid #2F4F4F;
+    color: white;
+    background-color: #2E4d7B;
+	font-family: Arial, Sans-Serif;
+	font-size: 12px;
+	font-weight: bold;
+    padding: 5px;
+    margin-top: 5px;
+    cursor: pointer;
+}
+
+#master_content .accordionHeader a
+{
+	color: #FFFFFF;
+	background: none;
+	text-decoration: none;
+}
+
+#master_content .accordionHeader a:hover
+{
+	background: none;
+	text-decoration: underline;
+}
+
+.accordionHeaderSelected
+{
+    border: 1px solid #2F4F4F;
+    color: white;
+    background-color: #5078B3;
+	font-family: Arial, Sans-Serif;
+	font-size: 12px;
+	font-weight: bold;
+    padding: 5px;
+    margin-top: 5px;
+    cursor: pointer;
+}
+
+#master_content .accordionHeaderSelected a
+{
+	color: #FFFFFF;
+	background: none;
+	text-decoration: none;
+}
+
+#master_content .accordionHeaderSelected a:hover
+{
+	background: none;
+	text-decoration: underline;
+}
+
+.accordionContent
+{
+    background-color: #D3DEEF;
+    border: 1px dashed #2F4F4F;
+    border-top: none;
+    padding: 5px;
+    padding-top: 10px;
+}
+.tableCell
+{
+background-color:#5D7B9D; 
+ font-family: Georgia; 
+ font-size:small;	
+ color:White;
+}
+.textbackcolor
+{
+background-color:#F4F0EF;
+	width: 881px;
+}
+/*-------------------------------*/
+/*  Tab Style  */
+.fancy .ajax__tab_header 
+{
+	font-size:13px;
+	font-weight:bold;
+	color:#000000;
+    font-family:sans-serif;
+     background:url(../img/blue_bg.jpg) repeat-x;
+}
+.fancy .ajax__tab_active .ajax__tab_outer,
+.fancy .ajax__tab_header .ajax__tab_outer,
+.fancy .ajax__tab_hover .ajax__tab_outer
+{
+    height:46px;
+    background:url(../img/blue_left.jpg) no-repeat left top;
+}
+.fancy .ajax__tab_active .ajax__tab_inner,
+.fancy .ajax__tab_header .ajax__tab_inner,
+.fancy .ajax__tab_hover .ajax__tab_inner
+{
+    height:46px;
+    margin-left:16px; /* offset the width of the left image */
+    background:url(../img/blue_right.jpg) no-repeat right top;
+}
+.fancy .ajax__tab_active .ajax__tab_tab,
+.fancy .ajax__tab_hover .ajax__tab_tab,
+.fancy .ajax__tab_header .ajax__tab_tab
+{
+	margin:16px 16px 0px 0px;
+}
+.fancy .ajax__tab_hover .ajax__tab_tab,
+.fancy .ajax__tab_active .ajax__tab_tab 
+{
+	color:#cccccc;
+}
+.fancy .ajax__tab_body 
+{
+    font-family:verdana,tahoma,helvetica;
+    font-size:10pt;
+    border:1px solid #999999;
+    border-top:0;
+    padding:2px;
+    background-color:#666666;
+}
+
+/* end  Tab Style  */
+
+.WaterMark
+{
+    font-style:italic;
+    color:Gray;
+}
